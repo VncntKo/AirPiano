@@ -83,7 +83,7 @@ public class MultiBoxTracker {
     private int endCount = 0;
     private boolean flag = false;
     private boolean pressflag = false;  // 키보드를 눌렀을 때 한번만 소리나도록 설정하는 flag
-    private boolean [] noteflag = {false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+    private boolean[] noteflag = {false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 
     public Path mPath = new Path();
     public static Bitmap bmap;
@@ -149,10 +149,6 @@ public class MultiBoxTracker {
     }
 
     public synchronized void drawDebug(final Canvas canvas) {
-        final Paint textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(60.0f);
-
         final Paint boxPaint = new Paint();
         boxPaint.setColor(Color.RED);
         boxPaint.setAlpha(200);
@@ -161,29 +157,8 @@ public class MultiBoxTracker {
 
         for (final Pair<Float, RectF> detection : screenRects) {
             final RectF rect = detection.second;
-            canvas.drawRect(rect, boxPaint);
-            if (rect.height() > 0 && rect.height() < 1000) {
-                long distance = Math.round(Math.pow((Math.sqrt(Math.pow(rect.height() / 2, 2) + Math.pow(rect.width() / 2, 2))) / 30, 3));
 
-                logger.i("rect is here : " + distance + " center x : " + Math.round(rect.centerX()));
-
-                String xs = "";
-                String ys = "";
-                String zs = "";
-                if (rect.width() > 0) {
-                    xs = (Integer.toString(Math.round(rect.centerX()))) + " ";
-                    ys = (Integer.toString(Math.round(rect.centerY()))) + " ";
-                    zs = (Double.toString(Math.round(distance))) + " ";
-                }
-
-
-                writeWord("xpoints.txt", xs, true);
-                writeWord("ypoints.txt", ys, true);
-                writeWord("zpoints.txt", zs, true);
-            }
-
-//            canvas.drawText("" + detection.first, rect.left, rect.top, textPaint);
-            borderedText.drawText(canvas, rect.centerX(), rect.centerY(), "" + detection.first);
+            canvas.drawRect(rect.left, 1100 - rect.top, rect.right, 1100 - rect.bottom, boxPaint);
         }
     }
 
@@ -201,10 +176,10 @@ public class MultiBoxTracker {
         return frameToCanvasMatrix;
     }
 
-    public int sum(List<Integer> list){
+    public int sum(List<Integer> list) {
         int sum = 0;
 
-        for (int i : list){
+        for (int i : list) {
             sum = sum + i;
         }
 
@@ -216,7 +191,7 @@ public class MultiBoxTracker {
 
         float cwidth = canvas.getWidth();
         float cheight = canvas.getHeight();
-        float keywidth = cwidth/(float)16.0;
+        float keywidth = cwidth / (float) 16.0;
 
         final boolean rotated = sensorOrientation % 180 == 90;
         final float multiplier =
@@ -250,7 +225,7 @@ public class MultiBoxTracker {
 
             getFrameToCanvasMatrix().mapRect(trackedPos);
 
-            if (1200 - trackedPos.centerY() > C.getHeight() / 5 * 4) {
+            if (1200 - trackedPos.centerY() > C.getHeight() / 6 * 5) {
                 inBox.setColor(Color.BLUE);
                 inBox.setStrokeWidth(25);
                 canvas.drawCircle(trackedPos.centerX() - 20, 1200 - trackedPos.centerY(), 25, inBox);
@@ -263,27 +238,25 @@ public class MultiBoxTracker {
                 }
 
                 fornow.add(now);
-            }
-            else{
+            } else {
                 outBox.setColor(Color.RED);
                 outBox.setStrokeWidth(25);
                 canvas.drawCircle(trackedPos.centerX() - 20, 1200 - trackedPos.centerY(), 25, outBox);
             }
         }
         logger.i("this is list fornow : " + fornow);
-        for (int i=0; i<notequeue.length; i++){
-            if (fornow.contains(i)){
+        for (int i = 0; i < notequeue.length; i++) {
+            if (fornow.contains(i)) {
                 notequeue[i].remove(0);
                 notequeue[i].add(1);
-            }
-            else{
+            } else {
                 notequeue[i].remove(0);
                 notequeue[i].add(0);
             }
         }
 
-        for (int i=0; i<noteflag.length; i++){
-            if (sum(notequeue[i]) == 0){
+        for (int i = 0; i < noteflag.length; i++) {
+            if (sum(notequeue[i]) == 0) {
                 noteflag[i] = false;
             }
         }
