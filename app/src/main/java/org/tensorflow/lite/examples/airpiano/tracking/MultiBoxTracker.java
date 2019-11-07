@@ -241,8 +241,10 @@ public class MultiBoxTracker {
 
         P.setAlpha(155);
         canvas.drawBitmap(pianoKeyboard, null, new Rect(0, 127, C.getWidth(), C.getHeight()), P);
+        P.setColor(Color.RED);
+        P.setStrokeWidth(20);
+        canvas.drawLine(0, C.getHeight() / 6 * 5, C.getWidth(), C.getHeight() / 6 * 5, P);
 
-        boolean only = false;
         ArrayList<Integer> fornow = new ArrayList<>();
 
         for (final TrackedRecognition recognition : trackedObjects) {
@@ -250,7 +252,7 @@ public class MultiBoxTracker {
 
             getFrameToCanvasMatrix().mapRect(trackedPos);
 
-            if (1200 - trackedPos.centerY() > C.getHeight() / 5 * 4) {
+            if (1200 - trackedPos.centerY() > C.getHeight() / 6 * 5) {
                 inBox.setColor(Color.BLUE);
                 inBox.setStrokeWidth(25);
                 canvas.drawCircle(trackedPos.centerX() - 20, 1200 - trackedPos.centerY(), 25, inBox);
