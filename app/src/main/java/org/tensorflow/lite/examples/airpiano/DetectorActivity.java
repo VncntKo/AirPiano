@@ -135,6 +135,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     private ArrayList<Integer> inside12 = new ArrayList<>();
     private ArrayList<Integer> inside13 = new ArrayList<>();
     private ArrayList<Integer> inside14 = new ArrayList<>();
+    private ArrayList<Integer> inside15 = new ArrayList<>();
 
     @Override
     public void onClick(View v) {
@@ -151,14 +152,20 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
         SoundPool pool;
         pool = new SoundPool(5, AudioManager.STREAM_MUSIC, 3);
-        int do1 = pool.load(this, R.raw.do1, 1);
-        int re1 = pool.load(this, R.raw.re1, 1);
-        int mi1 = pool.load(this, R.raw.mi1, 1);
-        int fa1 = pool.load(this, R.raw.fa1, 1);
-        int sol1 = pool.load(this, R.raw.sol1, 1);
-        int la1 = pool.load(this, R.raw.la1, 1);
-        int ti1 = pool.load(this, R.raw.ti1, 1);
-        int do2 = pool.load(this, R.raw.do2, 1);
+        int C3 = pool.load(this, R.raw.pianomfc3, 1);
+        int D3 = pool.load(this, R.raw.pianomfd3, 1);
+        int E3 = pool.load(this, R.raw.pianomfe3, 1);
+        int F3 = pool.load(this, R.raw.pianomff3, 1);
+        int G3 = pool.load(this, R.raw.pianomfg3, 1);
+        int A3 = pool.load(this, R.raw.pianomfa3, 1);
+        int B3 = pool.load(this, R.raw.pianomfb3, 1);
+        int C4 = pool.load(this, R.raw.pianomfc4, 1);
+        int D4 = pool.load(this, R.raw.pianomfd4, 1);
+        int E4 = pool.load(this, R.raw.pianomfe4, 1);
+        int F4 = pool.load(this, R.raw.pianomff4, 1);
+        int G4 = pool.load(this, R.raw.pianomfg4, 1);
+        int A4 = pool.load(this, R.raw.pianomfa4, 1);
+        int B4 = pool.load(this, R.raw.pianomfb4, 1);
 
         for(int i=0;i<QueueSize;i++){
             inside1.add(0);
@@ -202,12 +209,15 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         for(int i=0;i<QueueSize;i++){
             inside14.add(0);
         }
+        for(int i=0;i<QueueSize;i++){
+            inside15.add(0);
+        }
 
         ArrayList [] notequeue = {inside1, inside2, inside3, inside4, inside5,
                 inside6, inside7, inside8, inside9, inside10,
-                inside11, inside12, inside13, inside14};
+                inside11, inside12, inside13, inside14, inside15};
 
-        int[] note = {do1, re1, mi1, fa1, sol1, la1, ti1, do2};
+        int[] note = {C3, D3, E3, F3, G3, A3, B3, C4, D4, E4, F4, G4, A4, B4};
 
         tracker = new MultiBoxTracker(this, note, pool);
 
@@ -290,7 +300,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
             return;
         }
         computingDetection = true;
-        LOGGER.i("Preparing image " + currTimestamp + " for detection in bg thread.");
+//        LOGGER.i("Preparing image " + currTimestamp + " for detection in bg thread.");
 
         rgbFrameBitmap.setPixels(getRgbBytes(), 0, previewWidth, 0, 0, previewWidth, previewHeight);
 
@@ -309,7 +319,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                 new Runnable() {
                     @Override
                     public void run() {
-                        LOGGER.i("Running detection on image " + currTimestamp);
+//                        LOGGER.i("Running detection on image " + currTimestamp);
                         final long startTime = SystemClock.uptimeMillis();
 
                         final List<Classifier.Recognition> results = detector.recognizeImage(croppedBitmap);

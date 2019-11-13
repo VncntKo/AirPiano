@@ -83,7 +83,7 @@ public class MultiBoxTracker {
     private int endCount = 0;
     private boolean flag = false;
     private boolean pressflag = false;  // 키보드를 눌렀을 때 한번만 소리나도록 설정하는 flag
-    private boolean [] noteflag = {false, false, false, false, false, false, false, false, false, false, false, false, false, false};
+    private boolean [] noteflag = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 
     public Path mPath = new Path();
     public static Bitmap bmap;
@@ -188,7 +188,7 @@ public class MultiBoxTracker {
     }
 
     public synchronized int trackResults(final List<Recognition> results, final long timestamp) {
-        logger.i("Processing %d results from %d", results.size(), timestamp);
+//        logger.i("Processing %d results from %d", results.size(), timestamp);
         numDetect = results.size();
 
         processResults(results);
@@ -232,7 +232,7 @@ public class MultiBoxTracker {
                         sensorOrientation,
                         false);
 
-        logger.i("trackedObjects count test : " + trackedObjects.size());
+//        logger.i("trackedObjects count test : " + trackedObjects.size());
 
         bmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
 
@@ -272,7 +272,7 @@ public class MultiBoxTracker {
                 canvas.drawCircle(trackedPos.centerX() - 20, 1200 - trackedPos.centerY(), 25, outBox);
             }
         }
-        logger.i("this is list fornow : " + fornow);
+//        logger.i("this is list fornow : " + fornow);
         for (int i=0; i<notequeue.length; i++){
             if (fornow.contains(i)){
                 notequeue[i].remove(0);
