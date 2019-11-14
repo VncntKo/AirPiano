@@ -80,10 +80,7 @@ public class MultiBoxTracker {
     private float lastY;
     private boolean first = true;
     private int count = 0;
-    private int endCount = 0;
     private boolean flag = false;
-    private boolean pressflag = false;  // 키보드를 눌렀을 때 한번만 소리나도록 설정하는 flag
-
     private boolean [] noteflag = {false, false, false, false, false, false, false, false, false, false, false, false, false, false, false};
 
 
@@ -124,31 +121,6 @@ public class MultiBoxTracker {
         frameWidth = width;
         frameHeight = height;
         this.sensorOrientation = sensorOrientation;
-    }
-
-    protected void writeWord(String destination, String text, boolean append) {
-        WriteTextFile(foldername, destination, text, append);
-    }
-
-    protected void WriteTextFile(String folderName, String fileName, String contents, boolean append) {
-        try {
-            File dir = new File(folderName);
-            //디렉토리 폴더가 없으면 생성함
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-            //파일 output stream 생성
-            FileOutputStream fos = new FileOutputStream(folderName + "/" + fileName, append);
-            //파일쓰기
-            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(fos));
-            writer.write(contents);
-            writer.flush();
-
-            writer.close();
-            fos.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public synchronized void drawDebug(final Canvas canvas) {
@@ -194,13 +166,7 @@ public class MultiBoxTracker {
         gray = graybit;
 
         float cwidth = canvas.getWidth();
-<<<<<<< HEAD
-//        float cheight = canvas.getHeight();
         float keywidth = cwidth/(float)16.0;
-=======
-        float cheight = canvas.getHeight();
-        float keywidth = cwidth / (float) 16.0;
->>>>>>> 07e45f322937b62c19f9d0b97370f25b5ad691a5
 
         final boolean rotated = sensorOrientation % 180 == 90;
         final float multiplier =
@@ -267,14 +233,9 @@ public class MultiBoxTracker {
             }
         }
 
-<<<<<<< HEAD
         P.setAlpha(70);
-        for (int i=0; i<noteflag.length; i++){
-            if (sum(notequeue[i]) == 0){
-=======
         for (int i = 0; i < noteflag.length; i++) {
             if (sum(notequeue[i]) == 0) {
->>>>>>> 07e45f322937b62c19f9d0b97370f25b5ad691a5
                 noteflag[i] = false;
             }
             else{
@@ -371,19 +332,6 @@ public class MultiBoxTracker {
             }
         }
         return -22;
-    }
-
-    private synchronized void drawHit(int a, int b, int c, int d) {
-        final Canvas canvas = new Canvas();
-        final Paint boxPaint = new Paint();
-        boxPaint.setColor(Color.RED);
-        boxPaint.setStrokeWidth(20f);
-        boxPaint.setAlpha(200);
-        boxPaint.setStyle(Style.STROKE);
-
-        while (true) {
-            canvas.drawRect(a, b, c, d, boxPaint);
-        }
     }
 
     private void processResults(final List<Recognition> results) {

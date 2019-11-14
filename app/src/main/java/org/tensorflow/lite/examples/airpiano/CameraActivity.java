@@ -213,7 +213,6 @@ public abstract class CameraActivity extends AppCompatActivity
         yuvBytes[0] = bytes;
         yRowStride = previewWidth;
 
-//        camera.startPreview();
         imageConverter =
                 new Runnable() {
                     @Override
@@ -484,7 +483,6 @@ public abstract class CameraActivity extends AppCompatActivity
         // advance the actual necessary dimensions of the yuv planes.
         String lengplanes = Integer.toString(planes.length);
 
-//        LOGGER.i("FILLBYTES FUNCTION RUN planes.length : ", lengplanes);
         for (int i = 0; i < planes.length; ++i) {
             final ByteBuffer buffer = planes[i].getBuffer();
             if (yuvBytes[i] == null) {
@@ -522,13 +520,13 @@ public abstract class CameraActivity extends AppCompatActivity
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if (buttonView == debugSwitch) {
             debug = !debug;
-            if (debug) {
-                Toast.makeText(getApplicationContext(), "Debug Mode ON", Toast.LENGTH_SHORT).show();
-                String text = showText();
-                writeWord(text);
-            } else {
-                Toast.makeText(getApplicationContext(), "Debug Mode OFF", Toast.LENGTH_SHORT).show();
-            }
+//            if (debug) {
+//                Toast.makeText(getApplicationContext(), "Debug Mode ON", Toast.LENGTH_SHORT).show();
+//                String text = showText();
+//                writeWord(text);
+//            } else {
+//                Toast.makeText(getApplicationContext(), "Debug Mode OFF", Toast.LENGTH_SHORT).show();
+//            }
         }
 //        setUseNNAPI(isChecked);
 //        if (isChecked) apiSwitchCompat.setText("NNAPI");
@@ -555,45 +553,10 @@ public abstract class CameraActivity extends AppCompatActivity
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), path);
                 img.setImageBitmap(bitmap);
                 img.setVisibility(View.VISIBLE);
-//        img_title.setVisibility(View.VISIBLE);
-//                BnChoose.setEnabled(false);
-//                BnUpload.setEnabled(true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-    }
-//  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//    super.onActivityResult(requestCode, resultCode, data);
-//    if(requestCode==IMG_REQUEST && resultCode == RESULT_OK && data != null) {
-////        ImageView im = (ImageView) findViewById(R.id.image);
-//      Uri uri = data.getData();
-//      try {
-//        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), Uri.parse("file://"+uri));
-//
-////        getRealPathFromURI(uri);
-//
-//        img.setImageBitmap(bitmap);
-//        img.setVisibility(View.VISIBLE);
-//        BnChoose.setEnabled(false);
-//        BnUpload.setEnabled(false);
-//      } catch (FileNotFoundException e) {
-//        e.printStackTrace();
-//      } catch (IOException e) {
-//        e.printStackTrace();
-//      }
-//    }
-//  }
-
-    private String getRealPathFromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-
-        CursorLoader cursorLoader = new CursorLoader(this, contentUri, proj, null, null, null);
-        Cursor cursor = cursorLoader.loadInBackground();
-
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
     }
 
     private String imageToString() {
@@ -633,109 +596,6 @@ public abstract class CameraActivity extends AppCompatActivity
         });
     }
 
-    public void downloadText() {
-
-//        String rtext = "";
-
-        ApiInterfaceText apiInterfaceText = ApiClient.getApiClient().create(ApiInterfaceText.class);
-        Call<String> call = apiInterfaceText.downloadText("");
-
-
-        call.enqueue(new Callback<String>() {
-            public void onResponse(Call<String> call, Response<String> response) {
-
-//                Log.i("http", "innen: " + response.message());
-//                Log.i("http", "innen: " + response.body()); // here is your string!
-
-            }
-
-            public void onFailure(Call<String> call, Throwable t) {
-//                Log.d("http", "Throwable " + t.toString());
-            }
-
-        });
-
-
-        try {
-            String str = call.clone().execute().body();
-//            LOGGER.i("return string  " + str);
-
-            long start = System.currentTimeMillis();
-
-            Toast userToast = Toast.makeText(this, str, Toast.LENGTH_LONG);
-            userToast.setGravity(Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 900);
-            ViewGroup group = (ViewGroup) userToast.getView();
-            TextView messageTextView = (TextView) group.getChildAt(0);
-            messageTextView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 70);
-            userToast.show();
-
-            long end = System.currentTimeMillis();
-            LOGGER.i("#########################토스트 소요시간 : " + (end-start) + "\n\n");
-
-        } catch (IOException e) {
-            LOGGER.i("hoxy is never  ");
-            e.printStackTrace();
-        }
-
-    }
-
-    public String showText() {
-        String[] words;
-        Random r = new Random();
-        try {
-            String texts = readFromAssets("seven.txt");
-            words = texts.split("\n");
-            String word = words[r.nextInt(1284)];
-            for (int i = 0; i < 3; i++) {
-                Toast toast = Toast.makeText(getApplicationContext(), word, Toast.LENGTH_LONG);
-                ViewGroup group = (ViewGroup) toast.getView();
-                TextView messageTextView = (TextView) group.getChildAt(0);
-                messageTextView.setTextSize(25);
-                toast.show();
-            }
-            return word;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return "";
-        }
-    }
-
-//    public String showText() {
-//        String[] words;
-//        Random r = new Random();
-//        try {
-//            String texts = readFromAssets("rest1000.txt");
-//            words = texts.split("\n");
-//
-//            LOGGER.i("this is what : " + words[0]);
-//
-//            File saveFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "tensorflow/"); // 저장 경로
-//            BufferedReader buf = new BufferedReader(new FileReader(saveFile + "/index.txt"));
-//            String line = buf.readLine();
-//            int index = Integer.parseInt(line);
-//
-//            String word = words[index];
-//            for (int i = 0; i < 3; i++) {
-//                Toast toast = Toast.makeText(getApplicationContext(), word, Toast.LENGTH_LONG);
-//                ViewGroup group = (ViewGroup) toast.getView();
-//                TextView messageTextView = (TextView) group.getChildAt(0);
-//                messageTextView.setTextSize(25);
-//                toast.show();
-//            }
-//            if ((index+1) > 23){
-//                index = 0;
-//            }
-//            String strIndex = String.valueOf(index+1);
-//
-//            WriteTextFile(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "tensorflow/", "index.txt", strIndex, false);
-//
-//            return word;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return "";
-//        }
-//    }
-
     private String readFromAssets(String filename) throws Exception {
         BufferedReader reader = new BufferedReader(new InputStreamReader(getAssets().open(filename)));
 
@@ -754,9 +614,6 @@ public abstract class CameraActivity extends AppCompatActivity
     protected void showInference(String inferenceTime) {
         inferenceTimeTextView.setText(inferenceTime);
     }
-    protected abstract void writeWord(String text);
-
-    protected abstract void WriteTextFile(String folderName, String fileName, String contents, boolean append);
 
     protected abstract void processImage();
 
