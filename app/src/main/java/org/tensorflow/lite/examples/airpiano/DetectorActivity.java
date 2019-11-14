@@ -46,11 +46,9 @@ import org.tensorflow.lite.examples.airpiano.tflite.Classifier;
 import org.tensorflow.lite.examples.airpiano.tflite.TFLiteObjectDetectionAPIModel;
 import org.tensorflow.lite.examples.airpiano.tracking.MultiBoxTracker;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.SimpleDateFormat;
@@ -59,8 +57,6 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-import static org.tensorflow.lite.examples.airpiano.tracking.MultiBoxTracker.bmap;
-
 /**
  * An activity that uses a TensorFlowMultiBoxDetector and ObjectTracker to detect and then track
  * objects.
@@ -68,13 +64,6 @@ import static org.tensorflow.lite.examples.airpiano.tracking.MultiBoxTracker.bma
 public class DetectorActivity extends CameraActivity implements OnImageAvailableListener {
     private static final Logger LOGGER = new Logger();
 
-//   Configuration values for the prepackaged SSD model.
-//  private static final int TF_OD_API_INPUT_SIZE = 300;
-//  private static final boolean TF_OD_API_IS_QUANTIZED = true;
-//  private static final String TF_OD_API_MODEL_FILE = "detect.tflite";
-//  private static final String TF_OD_API_LABELS_FILE = "file:///android_asset/labelmap.txt";
-
-    // Configuration values for the prepackaged yolo model
     private static final int TF_OD_API_INPUT_SIZE = 300;
     private static final boolean TF_OD_API_IS_QUANTIZED = true;
     private static final String TF_OD_API_MODEL_FILE = "airpiano.tflite";
@@ -96,7 +85,10 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     private Bitmap rgbFrameBitmap = null;
     private Bitmap croppedBitmap = null;
     private Bitmap cropCopyBitmap = null;
+<<<<<<< HEAD
 //    public Bitmap pianoKeyboard = null;
+=======
+>>>>>>> 07e45f322937b62c19f9d0b97370f25b5ad691a5
 
     private boolean computingDetection = false;
 
@@ -116,7 +108,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     private Date mDate;
 
     final static String foldername = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "tensorflow/";
-    final static String filename = "inferenceTimeLog.txt";
 
     private boolean offInit = true;
     private int standardY = -1;
@@ -281,7 +272,11 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                     public void drawCallback(final Canvas canvas) {
                         tracker.draw(canvas, bit, graybit, notequeue);
                         if (isDebug()) {
+<<<<<<< HEAD
                             tracker.draw(canvas, null, null, notequeue);
+=======
+                            tracker.drawDebug(canvas);
+>>>>>>> 07e45f322937b62c19f9d0b97370f25b5ad691a5
                         }
                         if (isInit()) {
                             tracker.getY(canvas);
@@ -370,46 +365,9 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                             }
                         }
 
-                        int detectedSize = tracker.trackResults(mappedRecognitions, currTimestamp);
+                        tracker.trackResults(mappedRecognitions, currTimestamp);
 
-                        boolean firstDebug = true;
 
-//                        if (detectedSize == 3) {
-//                            if (isDebug()) {
-//                                if (!firstDebug) {
-//                                    firstDebug = false;
-//                                    bringWord();
-//                                } else {
-//                                    bringWord();        // save image
-//                                    String text = showText();
-//                                    //saveText(text);
-////                                    bringWord();        // save image
-//                                    writeWord(text);
-//                                }
-//                            }
-//                            if (isInit()) {
-//                                standardY = tracker.getY(canvas);
-//                                tracker.getLineClear();
-//                                InitClick = false;
-//                                LOGGER.i("this is standard Y axis : " + standardY);
-//
-//                                turnOffInit();
-////                                canvas.drawRect(0, standardY+5, 700, standardY-5, paint);
-//                            } else {
-//                                long start = System.currentTimeMillis();
-//
-//                                long upstart = System.currentTimeMillis();
-////                                uploadImage();
-//                                long upend = System.currentTimeMillis();
-//                                LOGGER.i("#########################업로드전체 소요시간 : " + (upend - upstart));
-//
-//                                SystemClock.sleep(120);
-////                                downloadText();
-//
-//                                long end = System.currentTimeMillis();
-//                                LOGGER.i("#########################전체 소요시간 : " + (end - start) + "\n\n");
-//                            }
-//                        }
 
                         if (isInit()) {
                             standardY = tracker.getY(canvas);
@@ -439,31 +397,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         WriteTextFile(foldername, "temp.txt", text, false);
     }
 
-
-    private void bringWord() {
-        String line = null; // 한줄씩 읽기
-        LOGGER.i("here foldername : " + foldername);
-        File saveFile = new File(foldername); // 저장 경로
-        // 폴더 생성
-        if (!saveFile.exists()) { // 폴더 없을 경우
-            saveFile.mkdir(); // 폴더 생성
-        }
-        try {
-            BufferedReader buf = new BufferedReader(new FileReader(saveFile + "/temp.txt"));
-            line = buf.readLine();
-
-            ImageUtils.saveBitmap(bmap, mFormat.format(mDate).toString() + " " + line);
-
-            buf.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void saveText(String text) {
-        WriteTextFile(foldername, "Words.txt", "|" + mFormat.format(mDate).toString() + "\n" + text, true);
-    }
-
     @Override
     protected void WriteTextFile(String folderName, String fileName, String contents, boolean append) {
         try {
@@ -486,21 +419,6 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
         }
     }
 
-//    public static Bitmap makeTransparent(Bitmap bit, Color transparentColor) {
-//        int width =  bit.getWidth();
-//        int height = bit.getHeight();
-//        Bitmap myBitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-//        int [] allpixels = new int [ myBitmap.getHeight()*myBitmap.getWidth()];
-//        bit.getPixels(allpixels, 0, myBitmap.getWidth(), 0, 0, myBitmap.getWidth(),myBitmap.getHeight());
-//        myBitmap.setPixels(allpixels, 0, width, 0, 0, width, height);
-//
-//        for(int i =0; i<myBitmap.getHeight()*myBitmap.getWidth();i++){
-//            allpixels[i] = Color.alpha(Color.TRANSPARENT);
-//        }
-//
-//        myBitmap.setPixels(allpixels, 0, myBitmap.getWidth(), 0, 0, myBitmap.getWidth(), myBitmap.getHeight());
-//        return myBitmap;
-//    }
 
     protected boolean turnOffInit() {
         return true;
