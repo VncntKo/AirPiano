@@ -88,6 +88,7 @@ public class MultiBoxTracker {
     public Path mPath = new Path();
     public static Bitmap bmap;
     public Bitmap pianoKeyboard = null;
+    public Bitmap gray = null;
     SoundPool spool;
     private int[] sevenNote;
 
@@ -211,11 +212,12 @@ public class MultiBoxTracker {
         return sum;
     }
 
-    public synchronized void draw(final Canvas canvas, final Bitmap bit, final ArrayList[] notequeue) {
+    public synchronized void draw(final Canvas canvas, final Bitmap bit, final Bitmap graybit, final ArrayList[] notequeue) {
         pianoKeyboard = bit;
+        gray = graybit;
 
         float cwidth = canvas.getWidth();
-        float cheight = canvas.getHeight();
+//        float cheight = canvas.getHeight();
         float keywidth = cwidth/(float)16.0;
 
         final boolean rotated = sensorOrientation % 180 == 90;
@@ -238,12 +240,13 @@ public class MultiBoxTracker {
 
         Canvas C = new Canvas(bmap);
         Paint P = new Paint();
+        float canvasheight = C.getHeight();
 
         P.setAlpha(155);
-        canvas.drawBitmap(pianoKeyboard, null, new Rect(0, 127, C.getWidth(), C.getHeight()), P);
+        canvas.drawBitmap(pianoKeyboard, null, new Rect(0, 127, C.getWidth(), (int) canvasheight), P);
         P.setColor(Color.RED);
         P.setStrokeWidth(20);
-        canvas.drawLine(0, C.getHeight() / 6 * 5, C.getWidth(), C.getHeight() / 6 * 5, P);
+        canvas.drawLine(0, canvasheight / 6 * 5, C.getWidth(), canvasheight / 6 * 5, P);
 
         ArrayList<Integer> fornow = new ArrayList<>();
 
@@ -252,18 +255,16 @@ public class MultiBoxTracker {
 
             getFrameToCanvasMatrix().mapRect(trackedPos);
 
-            if (1200 - trackedPos.centerY() > C.getHeight() / 6 * 5) {
+            if (1200 - trackedPos.centerY() > canvasheight / 6 * 5) {
                 inBox.setColor(Color.BLUE);
                 inBox.setStrokeWidth(25);
                 canvas.drawCircle(trackedPos.centerX() - 20, 1200 - trackedPos.centerY(), 25, inBox);
                 int now = (int) ((trackedPos.centerX() - 20) / keywidth);
 
                 if (!noteflag[now]) {
-
                     spool.play(now, 1, 1, 0, 0, 1);
                     noteflag[now] = true;
                 }
-
                 fornow.add(now);
             }
             else{
@@ -273,7 +274,7 @@ public class MultiBoxTracker {
             }
         }
 //        logger.i("this is list fornow : " + fornow);
-        for (int i=0; i<notequeue.length; i++){
+        for (int i=1; i<notequeue.length; i++){
             if (fornow.contains(i)){
                 notequeue[i].remove(0);
                 notequeue[i].add(1);
@@ -284,9 +285,13 @@ public class MultiBoxTracker {
             }
         }
 
+        P.setAlpha(70);
         for (int i=0; i<noteflag.length; i++){
             if (sum(notequeue[i]) == 0){
                 noteflag[i] = false;
+            }
+            else{
+                canvas.drawBitmap(gray, null, new Rect((int) keywidth * i, 127, (int) keywidth * (i+1), (int) canvasheight), P);
             }
         }
     }

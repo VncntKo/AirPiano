@@ -96,7 +96,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     private Bitmap rgbFrameBitmap = null;
     private Bitmap croppedBitmap = null;
     private Bitmap cropCopyBitmap = null;
-    public Bitmap pianoKeyboard = null;
+//    public Bitmap pianoKeyboard = null;
 
     private boolean computingDetection = false;
 
@@ -109,7 +109,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
     private BorderedText borderedText;
 
-    private int QueueSize = 10;
+    private int QueueSize = 6;
 
     SimpleDateFormat mFormat = new SimpleDateFormat("yyyy-MM-dd_hh-mm-ss");
     private long mNow;
@@ -256,9 +256,13 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
 
         Resources res = getResources();
         BitmapDrawable bd = null;
+        BitmapDrawable gray = null;
         bd = (BitmapDrawable) res.getDrawable(R.drawable.piano, null);
+        gray = (BitmapDrawable) res.getDrawable(R.drawable.gray, null);
         bd.setAlpha(50);
+        gray.setAlpha(10);
         Bitmap bit = bd.getBitmap();
+        Bitmap graybit = gray.getBitmap();
 
         frameToCropTransform =
                 ImageUtils.getTransformationMatrix(
@@ -275,9 +279,9 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
                 new DrawCallback() {
                     @Override
                     public void drawCallback(final Canvas canvas) {
-                        tracker.draw(canvas, bit, notequeue);
+                        tracker.draw(canvas, bit, graybit, notequeue);
                         if (isDebug()) {
-                            tracker.draw(canvas, null, notequeue);
+                            tracker.draw(canvas, null, null, notequeue);
                         }
                         if (isInit()) {
                             tracker.getY(canvas);
