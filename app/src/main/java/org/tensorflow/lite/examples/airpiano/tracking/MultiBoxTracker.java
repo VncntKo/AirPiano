@@ -203,11 +203,13 @@ public class MultiBoxTracker {
 
             getFrameToCanvasMatrix().mapRect(trackedPos);
 
-            if (1200 - trackedPos.centerY() > canvasheight / 6 * 5) {
+//            if (1200 - trackedPos.centerY() > canvasheight / 6 * 5) {
+            if (1600 - trackedPos.centerY() > canvasheight / 6 * 5) {
                 inBox.setColor(Color.BLUE);
                 inBox.setStrokeWidth(25);
-                canvas.drawCircle(trackedPos.centerX() - 20, 1200 - trackedPos.centerY(), 25, inBox);
-                int now = (int) ((trackedPos.centerX() - 20) / keywidth);
+//                canvas.drawCircle(trackedPos.centerX() - 20, 1200 - trackedPos.centerY(), 25, inBox);
+                canvas.drawCircle(trackedPos.centerX() - 50, 1600 - trackedPos.centerY(), 25, inBox);
+                int now = (int) ((trackedPos.centerX() - 50) / keywidth);
 
                 if (!noteflag[now]) {
                     spool.play(now, 1, 1, 0, 0, 1);
@@ -217,7 +219,8 @@ public class MultiBoxTracker {
             } else {
                 outBox.setColor(Color.RED);
                 outBox.setStrokeWidth(25);
-                canvas.drawCircle(trackedPos.centerX() - 20, 1200 - trackedPos.centerY(), 25, outBox);
+//                canvas.drawCircle(trackedPos.centerX() - 20, 1200 - trackedPos.centerY(), 25, outBox);
+                canvas.drawCircle(trackedPos.centerX() - 50, 1600 - trackedPos.centerY(), 25, outBox);
             }
         }
 

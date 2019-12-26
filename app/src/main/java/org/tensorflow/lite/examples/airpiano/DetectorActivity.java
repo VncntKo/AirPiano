@@ -77,7 +77,7 @@ public class DetectorActivity extends CameraActivity implements OnImageAvailable
     // Configuration values for the prepackaged yolo model
     private static final int TF_OD_API_INPUT_SIZE = 300;
     private static final boolean TF_OD_API_IS_QUANTIZED = true;
-    private static final String TF_OD_API_MODEL_FILE = "airpiano.tflite";
+    private static final String TF_OD_API_MODEL_FILE = "addallfinger.tflite";
     private static final String TF_OD_API_LABELS_FILE = "file:///android_asset/fingertip_label.txt";
 
     private static final DetectorMode MODE = DetectorMode.TF_OD_API;
